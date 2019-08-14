@@ -19,3 +19,37 @@ class Test(unittest.TestCase):
                                            'quantity': 3,
                                            'price': 15,
                                            'vat': 'no vat'})
+
+    def test_hardfactory(self):
+        factory = materials.Hardfactory()
+        self.assertEqual(isinstance(factory, materials.Itemfactory), True)
+
+    def test_softfactory(self):
+        factory = materials.Softfactory()
+        self.assertEqual(isinstance(factory, materials.Itemfactory), True)
+
+    def test_factories(self):
+        factory_h = materials.Hardfactory()
+        factory_s = materials.Softfactory()
+
+        factories = []
+        factories.append(factory_h)
+        factories.append(factory_s)
+        for factory in factories:
+            self.assertEqual(isinstance(factory.create_item(name='item', quantity=2, cost=3), materials.Item), True)
+
+        self.assertEqual(isinstance(factory_h.create_item(name='item1',
+                                                          quantity=1,
+                                                          cost=3), materials.Hardware), True)
+
+        self.assertEqual(isinstance(factory_h.create_item(name='item1',
+                                                          quantity=1,
+                                                          cost=3), materials.Software), False)
+
+        self.assertEqual(isinstance(factory_s.create_item(name='soft',
+                                                          quantity=1,
+                                                          cost=3), materials.Software), True)
+
+        self.assertEqual(isinstance(factory_s.create_item(name='soft',
+                                                      quantity=1,
+                                                      cost=3), materials.Hardware), False)
