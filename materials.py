@@ -6,7 +6,6 @@ Hardware orders by pieces or in packages.
 Software orders by licenses.
 """
 
-
 """Abstract Factory pattern for create items"""
 
 class Itemfactory(metaclass=abc.ABCMeta):
@@ -28,7 +27,7 @@ class Packfactory(Itemfactory):
     def create_item(self, name, quantity, cost, **kwargs):
         order_form = OrderPackages()
         if 'pack_val' in kwargs:
-            order_form.packvalue(kwargs['pack_val'])
+            order_form.package = kwargs['pack_val']
         return Hardware(name=name, quantity=quantity, cost=cost, order_form=order_form)
 
 
@@ -113,7 +112,12 @@ class OrderPackages(OrderForm):
     def __init__(self,):
         self._pcs_in_pack = __class__.DEFAULT_PACK
 
-    def packvalue(self, pcs_in_pack):
+    @property
+    def package(self):
+        return self._pcs_in_pack
+
+    @package.setter
+    def package(self, pcs_in_pack):
         self._pcs_in_pack = pcs_in_pack
 
     def get_order(self, name, quantity):
