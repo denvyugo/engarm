@@ -16,7 +16,7 @@ class EngarmDB:
     # cursor
     _cur = _cnn.cursor()
 
-    def closedb(self):
+    def close_db(self):
         print('close db')
         self._cnn.close()
 
@@ -42,12 +42,28 @@ class EngarmDB:
         else:
             self._cnn.commit()
 
+    def get_project(self, number=0):
+        if number == 0:
+            sql = 'select ID, ProjectName, ProjectCurrent from Projects order by ID desc limit 1'
+            prms = ()
+        else:
+            sql = 'select ID, ProjectName, ProjectCurrent from Projects where ID = ?'
+            prms = (number,)
+        try:
+            self._cur.execute(sql, prms)
+            row = self._cur.fetchone()
+            prj = ProjectData()
+            prj.number, prj.name, prj.current = row
+            return prj
+        except Exception as e:
+            print(e)
+
     def upd_project(self, project):
         sql = 'update Projects set ProjectName = ?, ProjectCurrent = ? where ID = ?'
         params = (project.name, project.current, project.number)
         try:
             self._cur.execute(sql, params)
-            self._cnn.commin()
+            self._cnn.commit()
         except Exception as e:
             print('Error in ''sql'':', e)
 

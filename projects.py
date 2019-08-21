@@ -35,3 +35,7 @@ class Project:
 
     def save_project(self):
         self._db.upd_project(self._prjdb)
+
+    def finish_project(self):
+        self._prjdb.current = False
+        self.save_project()
